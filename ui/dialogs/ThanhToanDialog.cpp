@@ -159,6 +159,10 @@ void ThanhToanDialog::onThanhToan() {
     if (heThong->thanhToanAPI(maLich.toStdString())) {
         QMessageBox::information(this, "Thành công",
                                  QString("Đã thanh toán thành công hóa đơn %1.\n✅ Đã xuất file vào thư mục 'hoadon'.").arg(maLich));
+        
+        // Lưu dữ liệu tự động
+        heThong->luuDuLieu();
+        
         refreshTable(); // Tải lại bảng (hóa đơn sẽ biến mất)
         txtChiTiet->clear();
     } else {

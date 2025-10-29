@@ -228,6 +228,7 @@ void DichVuDialog::onThemMoi() {
     
     if (heThong->themDichVuAPI(ma.toStdString(), ten.toStdString(), donVi.toStdString(),
                                gia, ton, loai.toStdString())) {
+        heThong->luuDuLieu();  // Lưu tự động
         QMessageBox::information(this, "Thành công", "Đã thêm dịch vụ mới!");
         loadDanhSach();
         clearInputs();
@@ -256,6 +257,7 @@ void DichVuDialog::onSua() {
     
     if (heThong->suaDichVuAPI(ma.toStdString(), ten.toStdString(), donVi.toStdString(),
                               gia, ton, loai.toStdString())) {
+        heThong->luuDuLieu();  // Lưu tự động
         QMessageBox::information(this, "Thành công", "Đã cập nhật dịch vụ!");
         loadDanhSach();
         clearInputs();
@@ -279,6 +281,7 @@ void DichVuDialog::onXoa() {
     
     if (reply == QMessageBox::Yes) {
         if (heThong->xoaDichVuAPI(ma.toStdString())) {
+            heThong->luuDuLieu();  // Lưu tự động
             QMessageBox::information(this, "Thành công", "Đã xóa dịch vụ!");
             loadDanhSach();
             clearInputs();
@@ -304,6 +307,7 @@ void DichVuDialog::onNhapHang() {
     
     if (ok) {
         if (heThong->nhapHangAPI(ma.toStdString(), soLuong)) {
+            heThong->luuDuLieu();  // Lưu tự động
             QMessageBox::information(this, "Thành công", 
                 QString("Đã nhập %1 %2!").arg(soLuong).arg(txtDonVi->text()));
             loadDanhSach();

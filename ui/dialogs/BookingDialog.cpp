@@ -393,5 +393,8 @@ void BookingDialog::onConfirm() {
     msgBox.setIcon(QMessageBox::Information);
     msgBox.exec();
 
+    // Lưu dữ liệu tự động
+    heThong->luuDuLieu();
+
     accept();
 }
