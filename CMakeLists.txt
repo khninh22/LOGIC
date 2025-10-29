@@ -10,19 +10,23 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets PrintSupport)
 
 # ==================== CORE - Entities ====================
 set(CORE_ENTITIES_SOURCES
     core/entities/KhachHang.cpp
     core/entities/SanBong.cpp
     core/entities/LichDatSan.cpp
+    core/entities/DichVu.cpp
+    core/entities/DonDichVu.cpp
 )
 
 set(CORE_ENTITIES_HEADERS
     core/entities/KhachHang.h
     core/entities/SanBong.h
     core/entities/LichDatSan.h
+    core/entities/DichVu.h
+    core/entities/DonDichVu.h
 )
 
 # ==================== CORE - Utils ====================
@@ -52,6 +56,7 @@ set(CORE_MANAGERS_SOURCES
     core/managers/QuanLySanBong.cpp
     core/managers/QuanLyLichDat.cpp
     core/managers/QuanLyThongKe.cpp
+    core/managers/QuanLyDichVu.cpp
 )
 
 set(CORE_MANAGERS_HEADERS
@@ -59,6 +64,7 @@ set(CORE_MANAGERS_HEADERS
     core/managers/QuanLySanBong.h
     core/managers/QuanLyLichDat.h
     core/managers/QuanLyThongKe.h
+    core/managers/QuanLyDichVu.h
 )
 
 # ==================== DATA ====================
@@ -87,6 +93,7 @@ set(UI_DIALOGS_SOURCES
     ui/dialogs/LichSuDialog.cpp
     ui/dialogs/ThanhToanDialog.cpp
     ui/dialogs/ThongKeDialog.cpp
+    ui/dialogs/DichVuDialog.cpp
 )
 
 set(UI_DIALOGS_HEADERS
@@ -96,6 +103,7 @@ set(UI_DIALOGS_HEADERS
     ui/dialogs/LichSuDialog.h
     ui/dialogs/ThanhToanDialog.h
     ui/dialogs/ThongKeDialog.h
+    ui/dialogs/DichVuDialog.h
 )
 
 set(UI_SOURCES
@@ -138,7 +146,7 @@ else()
     )
 endif()
 
-target_link_libraries(NEWGUI PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(NEWGUI PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport)
 
 # Include directories
 target_include_directories(NEWGUI PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

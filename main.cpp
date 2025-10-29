@@ -39,6 +39,7 @@
 #include "ui/dialogs/LichSuDialog.h"
 #include "ui/dialogs/ThanhToanDialog.h"
 #include "ui/dialogs/ThongKeDialog.h"
+#include "ui/dialogs/DichVuDialog.h"
 
 // ==================== CUSTOM WIDGET - Ô VUÔNG ĐẶT SÂN ====================
 class TimeSlotWidget : public QWidget {
@@ -175,6 +176,7 @@ private slots:
     void showLichSu();
     void showThanhToan();
     void showThongKe();
+    void showDichVu();
 
 protected:
     void showEvent(QShowEvent* event) override;
@@ -234,11 +236,13 @@ void MainWindow::createMenuBar() {
     auto* actThanhToan = menuQuanLy->addAction("💳 Thanh toán hóa đơn");
     auto* actThongKe = menuQuanLy->addAction("📈 Thống kê");
     menuQuanLy->addSeparator();
+    auto* actDichVu = menuQuanLy->addAction("🍔 Dịch vụ");
     auto* actKhach = menuQuanLy->addAction("👥 Khách hàng");
     auto* actLichSu = menuQuanLy->addAction("📋 Lịch sử đặt sân");
 
     connect(actThanhToan, &QAction::triggered, this, &MainWindow::showThanhToan);
     connect(actThongKe, &QAction::triggered, this, &MainWindow::showThongKe);
+    connect(actDichVu, &QAction::triggered, this, &MainWindow::showDichVu);
     connect(actKhach, &QAction::triggered, this, &MainWindow::showKhachHang);
     connect(actLichSu, &QAction::triggered, this, &MainWindow::showLichSu);
 
@@ -265,12 +269,14 @@ void MainWindow::createToolBar() {
     auto* actThanhToan = toolbar->addAction("💳 Thanh toán");
     auto* actThongKe = toolbar->addAction("📈 Thống kê");
     toolbar->addSeparator();
+    auto* actDichVu = toolbar->addAction("🍔 Dịch vụ");
     auto* actKhach = toolbar->addAction("👥 Khách hàng");
     auto* actLichSu = toolbar->addAction("📋 Lịch sử");
 
     connect(actRefresh, &QAction::triggered, this, &MainWindow::refreshAll);
     connect(actThanhToan, &QAction::triggered, this, &MainWindow::showThanhToan);
     connect(actThongKe, &QAction::triggered, this, &MainWindow::showThongKe);
+    connect(actDichVu, &QAction::triggered, this, &MainWindow::showDichVu);
     connect(actKhach, &QAction::triggered, this, &MainWindow::showKhachHang);
     connect(actLichSu, &QAction::triggered, this, &MainWindow::showLichSu);
 }
@@ -620,6 +626,12 @@ void MainWindow::showThanhToan() {
 void MainWindow::showThongKe() {
     ThongKeDialog dlg(heThong, this);
     dlg.exec();
+}
+
+void MainWindow::showDichVu() {
+    DichVuDialog dlg(heThong, this);
+    dlg.exec();
+    refreshAll(); // Làm mới sau khi thay đổi dịch vụ
 }
 
 #include "main.moc"

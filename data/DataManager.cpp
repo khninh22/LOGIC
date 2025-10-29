@@ -8,6 +8,8 @@ const string DataManager::DATA_DIR = "data/";
 const string DataManager::FILE_SAN = "data/sanbong.txt";
 const string DataManager::FILE_KHACH = "data/khachhang.txt";
 const string DataManager::FILE_LICH = "data/lichdatsan.txt";
+const string DataManager::FILE_DICHVU = "data/dichvu.txt";
+const string DataManager::FILE_DONDICHVU = "data/dondichvu.txt";
 
 int DataManager::splitByPipe(const string& line, string out[], int maxN) {
     int n = 0, start = 0;
@@ -167,9 +169,149 @@ bool DataManager::luuLichDatSan(const MangDong<LichDatSan>& ds) {
     return true;
 }
 
+bool DataManager::taiDichVu(MangDong<DichVu>& ds) {
+    ifstream file(FILE_DICHVU);
+    if (!file.is_open()) {
+        cout << "Khong tim thay " << FILE_DICHVU << ". Tao du lieu mau...\n";
+        // Dữ liệu mẫu
+        ds.them(DichVu("DV1", "Nuoc suoi", "Chai", 10000, 100, "Do uong", true));
+        ds.them(DichVu("DV2", "Nuoc ngot", "Lon", 15000, 80, "Do uong", true));
+        ds.them(DichVu("DV3", "Thue giay", "Doi", 50000, 20, "Thiet bi", true));
+        ds.them(DichVu("DV4", "Thue bong", "Qua", 30000, 15, "Thiet bi", true));
+        ds.them(DichVu("DV5", "Mi tom", "Goi", 20000, 50, "Do an", true));
+        return false;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        if (line.empty() || line[0] == '#') continue;
+
+        string c[7];
+        int cnt = splitByPipe(line, c, 7);
+        if (cnt < 6) continue;
+
+        double donGia = 0.0;
+        int ton = 0;
+        bool phucVu = true;
+
+        try { donGia = stod(c[3]); } catch (...) { donGia = 0.0; }
+        try { ton = stoi(c[4]); } catch (...) { ton = 0; }
+        if (cnt >= 7) phucVu = (c[6] == "1");
+
+        ds.them(DichVu(c[0], c[1], c[2], donGia, ton, c[5], phucVu));
+    }
+    file.close();
+    cout << "Da tai " << ds.getKichThuoc() << " dich vu.\n";
+    return true;
+}
+
+bool DataManager::taiDonDichVu(MangDong<DonDichVu>& ds) {
+    ifstream file(FILE_DONDICHVU);
+    if (!file.is_open()) {
+        cout << "Khong tim thay " << FILE_DONDICHVU << ".\n";
+        return false;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        if (line.empty() || line[0] == '#') continue;
+
+        string c[10];
+        int cnt = splitByPipe(line, c, 10);
+        if (cnt < 5) continue;
+
+        time_t tgDat = DateTimeUtils::stringToTime(c[3]);
+        
+        DonDichVu don(c[0], c[1], c[2], tgDat);
+        don.setTrangThai(cnt >= 5 ? c[4] : "Cho Xu Ly");
+
+        // Tải chi tiết dịch vụ (nếu có)
+        // Format: maDV1:tenDV1:soLuong1:donGia1;maDV2:tenDV2:soLuong2:donGia2
+        if (cnt >= 6 && !c[5].empty()) {
+            string chiTietStr = c[5];
+            int start = 0;
+            for (int i = 0; i <= (int)chiTietStr.size(); ++i) {
+                if (i == (int)chiTietStr.size() || chiTietStr[i] == ';') {
+                    string item = chiTietStr.substr(start, i - start);
+                    if (!item.empty()) {
+                        string parts[4];
+                        int pCnt = 0, pStart = 0;
+                        for (int j = 0; j <= (int)item.size(); ++j) {
+                            if (j == (int)item.size() || item[j] == ':') {
+                                if (pCnt < 4) parts[pCnt++] = item.substr(pStart, j - pStart);
+                                pStart = j + 1;
+                            }
+                        }
+                        if (pCnt >= 4) {
+                            int sl = 0;
+                            double gia = 0.0;
+                            try { sl = stoi(parts[2]); } catch (...) { sl = 0; }
+                            try { gia = stod(parts[3]); } catch (...) { gia = 0.0; }
+                            don.themDichVu(parts[0], parts[1], sl, gia);
+                        }
+                    }
+                    start = i + 1;
+                }
+            }
+        }
+
+        ds.them(don);
+    }
+    file.close();
+    cout << "Da tai " << ds.getKichThuoc() << " don dich vu.\n";
+    return true;
+}
+
+bool DataManager::luuDichVu(const MangDong<DichVu>& ds) {
+    ofstream file(FILE_DICHVU);
+    if (!file.is_open()) return false;
+
+    for (int i = 0; i < ds.getKichThuoc(); ++i) {
+        const DichVu& dv = ds[i];
+        file << dv.getMaDichVu() << "|"
+             << dv.getTenDichVu() << "|"
+             << dv.getDonVi() << "|"
+             << dv.getDonGia() << "|"
+             << dv.getSoLuongTon() << "|"
+             << dv.getLoaiDichVu() << "|"
+             << (dv.getConPhucVu() ? "1" : "0") << "\n";
+    }
+    file.close();
+    return true;
+}
+
+bool DataManager::luuDonDichVu(const MangDong<DonDichVu>& ds) {
+    ofstream file(FILE_DONDICHVU);
+    if (!file.is_open()) return false;
+
+    for (int i = 0; i < ds.getKichThuoc(); ++i) {
+        const DonDichVu& don = ds[i];
+        file << don.getMaDon() << "|"
+             << don.getMaLichDat() << "|"
+             << don.getMaKhachHang() << "|"
+             << DateTimeUtils::timeToString(don.getThoiGianDat()) << "|"
+             << don.getTrangThai() << "|";
+
+        // Lưu chi tiết dịch vụ
+        const auto& chiTiet = don.getChiTiet();
+        for (int j = 0; j < chiTiet.getKichThuoc(); ++j) {
+            if (j > 0) file << ";";
+            file << chiTiet[j].maDichVu << ":"
+                 << chiTiet[j].tenDichVu << ":"
+                 << chiTiet[j].soLuong << ":"
+                 << chiTiet[j].donGia;
+        }
+        file << "\n";
+    }
+    file.close();
+    return true;
+}
+
 void DataManager::taiTatCa(MangDong<SanBong>& dsSan,
                            MangDong<KhachHang>& dsKhach,
-                           MangDong<LichDatSan>& dsLich) {
+                           MangDong<LichDatSan>& dsLich,
+                           MangDong<DichVu>& dsDichVu,
+                           MangDong<DonDichVu>& dsDonDichVu) {
 #ifdef _WIN32
     system("if not exist data mkdir data");
 #else
@@ -179,11 +321,15 @@ void DataManager::taiTatCa(MangDong<SanBong>& dsSan,
     taiSanBong(dsSan);
     taiKhachHang(dsKhach);
     taiLichDatSan(dsLich);
+    taiDichVu(dsDichVu);
+    taiDonDichVu(dsDonDichVu);
 }
 
 void DataManager::luuTatCa(const MangDong<SanBong>& dsSan,
                            const MangDong<KhachHang>& dsKhach,
-                           const MangDong<LichDatSan>& dsLich) {
+                           const MangDong<LichDatSan>& dsLich,
+                           const MangDong<DichVu>& dsDichVu,
+                           const MangDong<DonDichVu>& dsDonDichVu) {
 #ifdef _WIN32
     system("if not exist data mkdir data");
 #else
@@ -193,6 +339,8 @@ void DataManager::luuTatCa(const MangDong<SanBong>& dsSan,
     luuSanBong(dsSan);
     luuKhachHang(dsKhach);
     luuLichDatSan(dsLich);
+    luuDichVu(dsDichVu);
+    luuDonDichVu(dsDonDichVu);
 
     cout << "Da luu toan bo du lieu.\n";
 }

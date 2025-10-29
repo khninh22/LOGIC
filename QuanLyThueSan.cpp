@@ -10,6 +10,7 @@ QuanLyThueSan::QuanLyThueSan() {
     mgrSan = new QuanLySanBong(&dsSanBong);
     mgrLich = new QuanLyLichDat(&dsLichDatSan, &dsSanBong);
     mgrThongKe = new QuanLyThongKe(&dsLichDatSan, &dsSanBong);
+    mgrDichVu = new QuanLyDichVu(&dsDichVu, &dsDonDichVu);
 }
 
 QuanLyThueSan::~QuanLyThueSan() {
@@ -17,6 +18,7 @@ QuanLyThueSan::~QuanLyThueSan() {
     delete mgrSan;
     delete mgrLich;
     delete mgrThongKe;
+    delete mgrDichVu;
 }
 
 // ==================== API CHO GUI - KHÁCH HÀNG ====================
@@ -117,11 +119,11 @@ string QuanLyThueSan::formatDateTime(time_t t) {
 // ==================== FILE I/O ====================
 
 void QuanLyThueSan::taiDuLieu() {
-    DataManager::taiTatCa(dsSanBong, dsKhachHang, dsLichDatSan);
+    DataManager::taiTatCa(dsSanBong, dsKhachHang, dsLichDatSan, dsDichVu, dsDonDichVu);
 }
 
 void QuanLyThueSan::luuDuLieu() {
-    DataManager::luuTatCa(dsSanBong, dsKhachHang, dsLichDatSan);
+    DataManager::luuTatCa(dsSanBong, dsKhachHang, dsLichDatSan, dsDichVu, dsDonDichVu);
 }
 
 bool QuanLyThueSan::backup(const string& backupName) {
@@ -130,4 +132,58 @@ bool QuanLyThueSan::backup(const string& backupName) {
 
 bool QuanLyThueSan::restore(const string& backupName) {
     return DataManager::restoreData(backupName);
+}
+
+// ==================== API DỊCH VỤ ====================
+
+bool QuanLyThueSan::themDichVuAPI(const string& ma, const string& ten, const string& donVi,
+                                  double donGia, int ton, const string& loai) {
+    return mgrDichVu->themDichVu(ma, ten, donVi, donGia, ton, loai);
+}
+
+bool QuanLyThueSan::suaDichVuAPI(const string& ma, const string& ten, const string& donVi,
+                                 double donGia, int ton, const string& loai) {
+    return mgrDichVu->suaDichVu(ma, ten, donVi, donGia, ton, loai);
+}
+
+bool QuanLyThueSan::xoaDichVuAPI(const string& ma) {
+    return mgrDichVu->xoaDichVu(ma);
+}
+
+bool QuanLyThueSan::nhapHangAPI(const string& ma, int soLuong) {
+    return mgrDichVu->nhapHang(ma, soLuong);
+}
+
+bool QuanLyThueSan::taoDonDichVuAPI(const string& maLich, const string& maKH, string& outMaDon) {
+    return mgrDichVu->taoDonDichVu("", maLich, maKH, outMaDon);
+}
+
+bool QuanLyThueSan::themDichVuVaoDonAPI(const string& maDon, const string& maDV, int soLuong) {
+    return mgrDichVu->themDichVuVaoDon(maDon, maDV, soLuong);
+}
+
+bool QuanLyThueSan::xoaDichVuKhoiDonAPI(const string& maDon, const string& maDV) {
+    return mgrDichVu->xoaDichVuKhoiDon(maDon, maDV);
+}
+
+bool QuanLyThueSan::huyDonDichVuAPI(const string& maDon) {
+    return mgrDichVu->huyDon(maDon);
+}
+
+bool QuanLyThueSan::daGiaoDonAPI(const string& maDon) {
+    return mgrDichVu->daGiaoDon(maDon);
+}
+
+MangDong<DonDichVu> QuanLyThueSan::layDonTheoLichAPI(const string& maLich) const {
+    return mgrDichVu->layDonTheoLich(maLich);
+}
+
+double QuanLyThueSan::tinhTongTienDonAPI(const string& maLich) const {
+    // Lấy tất cả đơn dịch vụ của lịch đặt này
+    MangDong<DonDichVu> dsDon = mgrDichVu->layDonTheoLich(maLich);
+    double tongTien = 0.0;
+    for (int i = 0; i < dsDon.getKichThuoc(); ++i) {
+        tongTien += dsDon[i].getTongTien();
+    }
+    return tongTien;
 }

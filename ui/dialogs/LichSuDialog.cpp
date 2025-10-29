@@ -66,7 +66,12 @@ void LichSuDialog::refreshTable() {
         tblLich->setItem(row, 4, new QTableWidgetItem(QString::fromStdString(
                                      QuanLyThueSan::formatDateTime(ds[i].getThoiGianKetThuc()))));
 
-        auto* tienItem = new QTableWidgetItem(QString::number(ds[i].getTongTien(), 'f', 0) + " VND");
+        // Tính tổng tiền bao gồm cả dịch vụ
+        double tongTien = ds[i].getTongTien();
+        double tienDichVu = heThong->tinhTongTienDonAPI(ds[i].getMaLichDat());
+        double tongCong = tongTien + tienDichVu;
+        
+        auto* tienItem = new QTableWidgetItem(QString::number(tongCong, 'f', 0) + " VND");
         tienItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
         tblLich->setItem(row, 5, tienItem);
 

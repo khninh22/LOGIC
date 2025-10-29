@@ -1,6 +1,10 @@
 #include "ValidationService.h"
 #include <cctype>
 
+bool ValidationService::kiemTraMa(const string& ma) {
+    return !ma.empty() && ma.length() <= 10;
+}
+
 bool ValidationService::kiemTraMaSanHopLe(const string& maSan) {
     return !maSan.empty() && maSan.length() <= 10;
 }

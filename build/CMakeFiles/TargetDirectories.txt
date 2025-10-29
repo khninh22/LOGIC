@@ -1,0 +1,9 @@
+C:/Users/ADMIN/OneDrive/Documents/NEWGUI/build/CMakeFiles/NEWGUI.dir
+C:/Users/ADMIN/OneDrive/Documents/NEWGUI/build/CMakeFiles/edit_cache.dir
+C:/Users/ADMIN/OneDrive/Documents/NEWGUI/build/CMakeFiles/rebuild_cache.dir
+C:/Users/ADMIN/OneDrive/Documents/NEWGUI/build/CMakeFiles/list_install_components.dir
+C:/Users/ADMIN/OneDrive/Documents/NEWGUI/build/CMakeFiles/install.dir
+C:/Users/ADMIN/OneDrive/Documents/NEWGUI/build/CMakeFiles/install/local.dir
+C:/Users/ADMIN/OneDrive/Documents/NEWGUI/build/CMakeFiles/install/strip.dir
+C:/Users/ADMIN/OneDrive/Documents/NEWGUI/build/CMakeFiles/NEWGUI_autogen_timestamp_deps.dir
+C:/Users/ADMIN/OneDrive/Documents/NEWGUI/build/CMakeFiles/NEWGUI_autogen.dir

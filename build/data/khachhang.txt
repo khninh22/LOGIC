@@ -1,0 +1,4 @@
+KH1|Nguyen Van A|0901234567
+KH2|Tran Thi B|0912345678
+KH3|Đinh Khang Ninh|0988999999
+KH4|Phan Văn Giang|0966888999

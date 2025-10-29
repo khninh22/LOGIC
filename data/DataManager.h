@@ -4,6 +4,8 @@
 #include "../core/entities/KhachHang.h"
 #include "../core/entities/SanBong.h"
 #include "../core/entities/LichDatSan.h"
+#include "../core/entities/DichVu.h"
+#include "../core/entities/DonDichVu.h"
 #include "../core/utils/ThuatToan.h"
 #include <string>
 using namespace std;
@@ -14,6 +16,8 @@ private:
     static const string FILE_SAN;
     static const string FILE_KHACH;
     static const string FILE_LICH;
+    static const string FILE_DICHVU;
+    static const string FILE_DONDICHVU;
 
     // Helper: Tách chuỗi theo dấu '|'
     static int splitByPipe(const string& line, string out[], int maxN);
@@ -23,20 +27,28 @@ public:
     static bool taiSanBong(MangDong<SanBong>& ds);
     static bool taiKhachHang(MangDong<KhachHang>& ds);
     static bool taiLichDatSan(MangDong<LichDatSan>& ds);
+    static bool taiDichVu(MangDong<DichVu>& ds);
+    static bool taiDonDichVu(MangDong<DonDichVu>& ds);
 
     // Lưu dữ liệu vào file
     static bool luuSanBong(const MangDong<SanBong>& ds);
     static bool luuKhachHang(const MangDong<KhachHang>& ds);
     static bool luuLichDatSan(const MangDong<LichDatSan>& ds);
+    static bool luuDichVu(const MangDong<DichVu>& ds);
+    static bool luuDonDichVu(const MangDong<DonDichVu>& ds);
 
     // Tải/Lưu tất cả
     static void taiTatCa(MangDong<SanBong>& dsSan,
                          MangDong<KhachHang>& dsKhach,
-                         MangDong<LichDatSan>& dsLich);
+                         MangDong<LichDatSan>& dsLich,
+                         MangDong<DichVu>& dsDichVu,
+                         MangDong<DonDichVu>& dsDonDichVu);
 
     static void luuTatCa(const MangDong<SanBong>& dsSan,
                          const MangDong<KhachHang>& dsKhach,
-                         const MangDong<LichDatSan>& dsLich);
+                         const MangDong<LichDatSan>& dsLich,
+                         const MangDong<DichVu>& dsDichVu,
+                         const MangDong<DonDichVu>& dsDonDichVu);
 
     // ✅ MỚI: Backup/Restore
     static bool backupData(const string& backupName);

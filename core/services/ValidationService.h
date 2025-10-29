@@ -6,6 +6,9 @@ using namespace std;
 
 class ValidationService {
 public:
+    // Kiểm tra mã hợp lệ (chung)
+    static bool kiemTraMa(const string& ma);
+
     // Kiểm tra mã sân hợp lệ
     static bool kiemTraMaSanHopLe(const string& maSan);
 

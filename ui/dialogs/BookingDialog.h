@@ -5,6 +5,10 @@
 #include <QComboBox>
 #include <QDate>
 #include <QTime>
+#include <QTableWidget>
+#include <QCheckBox>
+#include <QSpinBox>
+#include <QLabel>
 #include "../../QuanLyThueSan.h"
 
 class BookingDialog : public QDialog {
@@ -16,10 +20,15 @@ public:
 
 private:
     void loadKhachHangComboBox();
+    void loadDichVu();
+    void updateTongTien();
 
 private slots:
     void onKhachHangSelected(int index);
+    void onThemDichVu();
+    void onXoaDichVu();
     void onConfirm();
+    void onDichVuToggled(bool checked);
 
 private:
     QuanLyThueSan* heThong;
@@ -27,6 +36,20 @@ private:
     QDate ngay;
     QTime gioBD, gioKT;
     QComboBox* cboKhach;
+    
+    // Dịch vụ
+    QCheckBox* chkDichVu;
+    QComboBox* cboDichVu;
+    QSpinBox* spinSoLuong;
+    QTableWidget* tblDichVu;
+    QPushButton* btnThemDV;
+    QPushButton* btnXoaDV;
+    QLabel* lblTienSan;
+    QLabel* lblTienDichVu;
+    QLabel* lblTongTien;
+    
+    double tienSan;
+    double tienDichVu;
 };
 
 #endif // BOOKINGDIALOG_H

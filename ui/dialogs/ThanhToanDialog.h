@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QTableWidget>
 #include <QPushButton>
+#include <QTextBrowser>
 #include "../../QuanLyThueSan.h"
 
 class ThanhToanDialog : public QDialog {
@@ -14,11 +15,17 @@ public:
 private slots:
     void refreshTable();
     void onThanhToan();
+    void onRowSelected();
+    void onInHoaDon();
 
 private:
+    void hienThiChiTiet(const std::string& maLich);
+    
     QuanLyThueSan* heThong;
     QTableWidget* tblLich;
     QPushButton* btnThanhToan;
+    QPushButton* btnInHoaDon;
+    QTextBrowser* txtChiTiet;
 };
 
 #endif // THANHTOADIALOG_H

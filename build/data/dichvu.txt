@@ -1,0 +1,5 @@
+DV1|Nuoc suoi|Chai|10000|90|Do uong|1
+DV2|Nuoc ngot|Lon|15000|80|Do uong|1
+DV3|Thue giay|Doi|50000|14|Thiet bi|1
+DV4|Thue bong|Qua|30000|14|Thiet bi|1
+DV5|Mi tom|Goi|20000|47|Do an|1
